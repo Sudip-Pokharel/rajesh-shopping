@@ -14,12 +14,13 @@ const addButton = document.getElementById("addButton"),
     startDate = document.getElementById("start_date"),
     endDate = document.getElementById("end_date"),
     startTime = document.getElementById("start_time"),
-    endTime = document.getElementById("end_time");
+    endTime = document.getElementById("end_time"),
+    itemSearchInput = document.getElementById("itemSearch");
 
 var shoppingRecordArr = [
     { location: 'Oversea', items: 'copy', date: '03/12/1998', time: '10', cost: "44" },
     { location: 'Toowoomba', items: 'car', date: '08/02/1875', time: '23', cost: "55" },
-    { location: 'Australia', items: 'Pen, paper', date: '30/12/1773', time: '01', cost: "33" },
+    { location: 'Australia', items: 'Pen, paper', date: '31/12/1773', time: '01', cost: "33" },
 ]
 
 
@@ -40,13 +41,14 @@ function addRecord(e) {
         }
         data.items = itemInput.value;
         data.date = dateInput.value;
-        data.time = timeInput.value.split(":")[0];
+        data.time = formatTime(timeInput.value);
         data.cost = costInput.value;
         shoppingRecordArr.push(data);
         // newCartForm.reset();
         showRecords();
     }
 }
+
 function validatedate(inputText) {
     var opera1 = inputText.value.split('/');
     if (opera1.length == 3) {
@@ -299,9 +301,9 @@ function sortByDate() {
     let length = shoppingRecordArr.length;
     for (let i = 0; i < length; i++) {
         for (let j = 0; j < (length - i - 1); j++) {
-            let first = shoppingRecordArr[j].date.split("/");
-            let second = shoppingRecordArr[j + 1].date.split("/");
-            if (new Date(`${first[1]}/${first[0]}/${first[2]}`) > new Date(`${second[1]}/${second[0]}/${second[2]}`)) {
+            let first = formatDate(shoppingRecordArr[j].date);
+            let second = formatDate(shoppingRecordArr[j + 1].date);
+            if (first > second) {
                 let tmp1 = shoppingRecordArr[j];
                 shoppingRecordArr[j] = shoppingRecordArr[j + 1];
                 shoppingRecordArr[j + 1] = tmp1;
@@ -339,7 +341,6 @@ function sortByItems() {
     showRecords();
 }
 
-
 function searchRecord(e) {
     e.preventDefault();
     let checkDate = validatedate(startDate) && validatedate(endDate);
@@ -347,9 +348,9 @@ function searchRecord(e) {
     let checkStartEndDate = false;
     let checkStartEndTime = false;
     if (checkDate) {
-        let first = startDate.value.split("/");
-        let second = endDate.value.split("/");
-        if (new Date(`${first[1]}/${first[0]}/${first[2]}`) <= new Date(`${second[1]}/${second[0]}/${second[2]}`)) {
+        let first = formatDate(startDate.value);
+        let second = formatDate(endDate.value);
+        if (first <= second) {
             checkStartEndDate = true
         }
         else {
@@ -357,7 +358,7 @@ function searchRecord(e) {
         }
     }
     if (checkTime) {
-        if (Number(startTime.value.split(":")[0]) <= Number(endTime.value.split(":")[0])) {
+        if (formatTime(startTime.value) <= formatTime(endTime.value)) {
             checkStartEndTime = true
         }
         else {
@@ -368,8 +369,49 @@ function searchRecord(e) {
     if (checkStartEndDate && checkStartEndTime) {
         let searchResultArray = [];
         for (let i = 0; i < shoppingRecordArr.length; i++) {
+            let dateCondition = formatDate(shoppingRecordArr[i].date) >= formatDate(startDate.value)
+                && formatDate(shoppingRecordArr[i].date) <= formatDate(endDate.value);
+            let timeCondition = formatTime(shoppingRecordArr[i].time) >= formatTime(startTime.value)
+                && formatTime(shoppingRecordArr[i].time) <= formatTime(endTime.value);
+            let searchInputCondition = itemSearchInput.value !== ''
+                ? shoppingRecordArr[i].items.toLowerCase().includes(itemSearchInput.value.toLowerCase())
+                : true;
 
+            if (dateCondition && timeCondition && searchInputCondition) {
+                searchResultArray.push({ ...shoppingRecordArr[i] })
+            }
         }
+
+        if (searchResultArray.length > 0) {
+            let htmlContent = '';
+            for (let i = 0; i < searchResultArray.length; i++) {
+                htmlContent += `
+                <tr>
+                    <td>${searchResultArray[i].location}</td>
+                    <td>${searchResultArray[i].date}</td>
+                    <td>${searchResultArray[i].time}</td>
+                    <td>${searchResultArray[i].items}</td>
+                    <td>${searchResultArray[i].cost}</td>
+                </tr>
+                `
+            }
+            resultBody.innerHTML = '';
+            resultBody.innerHTML = htmlContent;
+        }
+        else {
+            resultBody.innerHTML = ''
+            console.log("no matching record");
+        }
+
     }
 
+}
+
+function formatDate(data) {
+    let format = data.split("/");
+    return new Date(`${format[1]}/${format[0]}/${format[2]}`);
+}
+
+function formatTime(data) {
+    return Number(data.split(":")[0]);
 }
