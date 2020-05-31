@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> HomewareCity: Shopping Cart System</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="cart__record">
+            <table id="record__table">
+                <thead>
+                    <tr>
+                        <th>Buyer Location</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Items</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="main__record__body">
+
+                </tbody>
+            </table>
+            <table id="summary__table">
+                <thead>
+                    <tr>
+                        <th>Buyer Location</th>
+                        <th>No. of records</th>
+                        <th>Total cost</th>
+                    </tr>
+                </thead>
+                <tbody id="summary__body">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="card__add">
+            <form id="newCartForm">
+                <div>
+                    <label>Buyer From</label>
+                    <input type="radio" id="toowoomba" name="location" checked value="Toowoomba">
+                    <label for="toowoomba">Toowoomba</label><br>
+                    <input type="radio" id="australia" name="location" value="Australia">
+                    <label for="australia">Australia</label><br>
+                    <input type="radio" id="oversea" name="location" value="Oversea">
+                    <label for="oversea">Oversea</label>
+                </div>
+                <div>
+                    <label for="item">Items</label>
+                    <input type="text" id="item" required>
+                </div>
+                <div>
+                    <label for="date">Date</label>
+                    <input type="text" id=date required>
+                </div>
+                <div>
+                    <label for="time">Time</label>
+                    <input type="text" id=time required>
+                </div>
+                <div>
+                    <label for="cost">Cost(AUD)</label>
+                    <input type="number" id=cost required>
+                </div>
+                <button id="addButton">Add shopping record</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
