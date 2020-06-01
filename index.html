@@ -13,6 +13,15 @@
     <div class="container">
         <div>
             <div class="cart__record">
+                <label for="sort_by">Sort by:</label>
+                <select id="sort_by">
+                    <option value>Select option</option>
+                    <option value="location">Buyers Location</option>
+                    <option value="date">Date</option>
+                    <option value="time">Time</option>
+                    <option value="items">Items</option>
+                    <option value="cost">Cost</option>
+                </select>
                 <table id="record__table">
                     <thead>
                         <tr>
@@ -53,21 +62,27 @@
                     </div>
                     <div>
                         <label for="item">Items</label>
-                        <input type="text" id="item" required>
+                        <input type="text" id="item">
+                        <p class="input__error-message">Items cannot be empty</p>
                     </div>
                     <div>
                         <label for="date">Date</label>
-                        <input type="text" id=date required>
+                        <input type="text" id=date>
+                        <p class="input__error-message">Date cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid date</p>
                     </div>
                     <div>
                         <label for="time">Time</label>
-                        <input type="text" id=time required>
+                        <input type="text" id=time>
+                        <p class="input__error-message">Time cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid time</p>
                     </div>
                     <div>
                         <label for="cost">Cost(AUD)</label>
-                        <input type="number" id=cost required>
+                        <input type="number" id=cost>
+                        <p class="input__error-message">Cost cannot be empty</p>
                     </div>
-                    <button id="addButton">Add shopping record</button>
+                    <a href="#" id="addButton" class="btn btn__secondary">Add shopping record</a>
                 </form>
             </div>
         </div>
@@ -94,23 +109,35 @@
                     <div>
                         <label for="start_date">Start Date</label>
                         <input type="text" id="start_date" value="01/01/2000">
+                        <p class="input__error-message">Start Date cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid date</p>
+                        <p class="mismatch__error-message">Start Date must be before End Date</p>
                     </div>
                     <div>
                         <label for="start_time">Time</label>
                         <input type="text" id="start_time" value="00:00am">
+                        <p class="input__error-message">Start Time cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid time</p>
+                        <p class="mismatch__error-message">Start Time must be before End Time</p>
                     </div>
                     <div>
                         <label for="end_date">End Date</label>
                         <input type="text" id="end_date" value="31/12/2020">
+                        <p class="input__error-message">End Date cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid date</p>
+                        <p class="mismatch__error-message">End Date must be before Start Date</p>
                     </div>
                     <div>
                         <label for="end_time">Time</label>
                         <input type="text" id="end_time" value="23:59pm">
+                        <p class="input__error-message">End Time cannot be empty</p>
+                        <p class="validate__error-message">Looks like this is not a valid time</p>
+                        <p class="mismatch__error-message">End Time must be before Start Time</p>
                     </div>
                     <div>
                         <input type="text" placeholder="Enter item name" id="itemSearch">
                     </div>
-                    <button id="searchButton">Search</button>
+                    <a href="#" id="searchButton" class="btn btn__primary">Search</a>
                 </form>
             </div>
         </div>

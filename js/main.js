@@ -1,14 +1,17 @@
-const addButton = document.getElementById("addButton"),
-    radios = document.getElementsByName('location'),
+const radios = document.getElementsByName('location'),
+    addRecordInput = document.querySelectorAll("#newCartForm input"),
     itemInput = document.getElementById("item"),
     dateInput = document.getElementById("date"),
     timeInput = document.getElementById("time"),
     costInput = document.getElementById("cost"),
     newCartForm = document.getElementById("newCartForm"),
+    addButton = document.getElementById("addButton"),
+    sortBy = document.getElementById("sort_by"),
     recordTable = document.getElementById("record__table"),
     mainTableBody = document.getElementById('main__record__body'),
     summaryBody = document.getElementById("summary__body"),
-    searchForm = document.getElementById("searchForm"),
+    searchFormInput = document.querySelectorAll("#searchForm input"),
+    searchButton = document.getElementById("searchButton"),
     resultTable = document.getElementById("result__table"),
     resultBody = document.getElementById("result__body"),
     startDate = document.getElementById("start_date"),
@@ -26,249 +29,6 @@ var state = {
         { location: 'Australia', items: 'Pen, paper', date: '31/12/1773', time: '01', cost: "33" },
     ],
     summaryData: []
-}
-
-
-newCartForm.addEventListener('submit', addRecord);
-searchForm.addEventListener('submit', searchRecord);
-
-function addRecord(e) {
-    e.preventDefault();
-    controller.addRecord()
-}
-
-function validatedate(inputText) {
-    let format = inputText.value.split('/');
-    let day, month, year;
-
-    if (format.length == 3) {
-        day = parseInt(format[0]);
-        month = parseInt(format[1]);
-        year = parseInt(format[2]);
-    }
-    if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year > 1583) {
-        let numberOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        if (month == 1 || month > 2) {
-            if (day > numberOfDays[month - 1]) {
-                alert('Invalid date format!');
-                return false;
-            }
-        }
-        if (month == 2) {
-            let leapYear = false;
-            if ((!(year % 4) && year % 100) || !(year % 400)) {
-                leapYear = true;
-            }
-            if ((leapYear == false) && (day >= 29)) {
-                alert('Invalid date format!');
-                return false;
-            }
-            if ((leapYear == true) && (day > 29)) {
-                alert('Invalid date format!');
-                return false;
-            }
-        }
-        return true;
-    }
-    else {
-        alert("Invalid date format!");
-        return false;
-    }
-}
-
-function validatetime(input) {
-    var strval = input.value;
-
-    //minimum lenght is 6. example 1:2 AM
-    if (strval.length < 5) {
-        alert("Error.Invalid time");
-        return false;
-    }
-    //Maximum length is 8. example 10:45 AM
-    if (strval.length > 7) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    //Checking AM/PM
-    if (strval.charAt(strval.length - 1) != "M" && strval.charAt(
-        strval.length - 1) != "m") {
-        alert("Error.Invalid time");
-        return false;
-
-    }
-    else if (strval.charAt(strval.length - 2) != 'A' && strval.charAt(
-        strval.length - 2) != 'a' && strval.charAt(
-            strval.length - 2) != 'p' && strval.charAt(strval.length - 2) != 'P') {
-        alert("Error.Invalid time");
-        return false;
-
-    }
-
-    var pos1 = strval.indexOf(':');
-    // timeInput.value = strval;
-
-    if (pos1 < 0) {
-        alert("Error.Invalid time");
-        return false;
-    }
-    else if (pos1 > 2 || pos1 < 1) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    //Checking hours
-    var horval = trimString(strval.substring(0, pos1));
-
-    if (horval == -100) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-
-    if (horval > 23) {
-        alert("Error.Invalid time");
-        return false;
-    }
-    else if (horval < 0) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    if (horval > 11 && strval.charAt(
-        strval.length - 2) == 'a') {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    if (horval < 12 && strval.charAt(
-        strval.length - 2) == 'p') {
-        alert("Error.Invalid time");
-        return false;
-    }
-    //Completes checking hours.
-
-    //Checking minutes.
-    var minval = trimString(strval.substring(pos1 + 1, pos1 + 3));
-
-    if (minval == -100) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    if (minval > 59) {
-        alert("Error.Invalid time");
-        return false;
-    }
-    else if (minval < 0) {
-        alert("Error.Invalid time");
-        return false;
-    }
-
-    return true;
-}
-
-function trimString(str) {
-    var str1 = '';
-    var i = 0;
-    while (i != str.length) {
-        if (str.charAt(i) != ' ') str1 = str1 + str.charAt(i); i++;
-    }
-    var retval = IsNumeric(str1);
-    if (retval == false)
-        return -100;
-    else
-        return str1;
-}
-
-function IsNumeric(strString) {
-    var strValidChars = "0123456789";
-    var strChar;
-    var blnResult = true;
-    if (strString.length == 0)
-        return false;
-    for (i = 0; i < strString.length && blnResult == true; i++) {
-        strChar = strString.charAt(i);
-        if (strValidChars.indexOf(strChar) == -1) {
-            blnResult = false;
-        }
-    }
-    return blnResult;
-}
-
-function searchRecord(e) {
-    e.preventDefault();
-    let checkDate = validatedate(startDate) && validatedate(endDate);
-    let checkTime = validatetime(startTime) && validatetime(endTime);
-    let checkStartEndDate = false;
-    let checkStartEndTime = false;
-    if (checkDate) {
-        let first = formatDate(startDate.value);
-        let second = formatDate(endDate.value);
-        if (first <= second) {
-            checkStartEndDate = true
-        }
-        else {
-            console.log("start date and end date error")
-        }
-    }
-
-    if (checkTime) {
-        if (formatTime(startTime.value) <= formatTime(endTime.value)) {
-            checkStartEndTime = true
-        }
-        else {
-            console.log("start time and end time error")
-        }
-    }
-    if (checkStartEndDate && checkStartEndTime) {
-        let searchResultArray = [];
-        for (let i = 0; i < state.shoppingRecordArr.length; i++) {
-            let dateCondition = formatDate(state.shoppingRecordArr[i].date) >= formatDate(startDate.value)
-                && formatDate(state.shoppingRecordArr[i].date) <= formatDate(endDate.value);
-            let timeCondition = Number(state.shoppingRecordArr[i].time) >= formatTime(startTime.value)
-                && Number(state.shoppingRecordArr[i].time) <= formatTime(endTime.value);
-            let searchInputCondition = itemSearchInput.value !== ''
-                ? state.shoppingRecordArr[i].items.toLowerCase().includes(itemSearchInput.value.toLowerCase())
-                : true;
-
-            if (dateCondition && timeCondition && searchInputCondition) {
-                searchResultArray.push({ ...state.shoppingRecordArr[i] })
-            }
-        }
-        console.log(searchResultArray)
-        if (searchResultArray.length > 0) {
-            let htmlContent = '';
-            for (let i = 0; i < searchResultArray.length; i++) {
-                htmlContent += `
-                <tr>
-                    <td>${searchResultArray[i].location}</td>
-                    <td>${searchResultArray[i].date}</td>
-                    <td>${searchResultArray[i].time}</td>
-                    <td>${searchResultArray[i].items}</td>
-                    <td>${searchResultArray[i].cost}</td>
-                </tr>
-                `
-            }
-            resultBody.innerHTML = '';
-            resultBody.innerHTML = htmlContent;
-        }
-        else {
-            resultBody.innerHTML = ''
-            console.log("no matching record");
-        }
-
-    }
-
-}
-
-function formatDate(data) {
-    let format = data.split("/");
-    return new Date(`${format[1]}/${format[0]}/${format[2]}`);
-}
-
-function formatTime(data) {
-    return Number(data.split(":")[0]);
 }
 
 var views = {
@@ -291,14 +51,35 @@ var views = {
             <td>${data.cost}</td>
         </tr>
         `;
+    },
+    searchTableView(data) {
+        return `
+        <tr>
+            <td>${data.location}</td>
+            <td>${data.date}</td>
+            <td>${data.time}</td>
+            <td>${data.items}</td>
+            <td>${data.cost}</td>
+        </tr>
+        `
     }
 }
 
 var controller = {
     addRecord() {
-        let checkDate = validatedate(dateInput);
-        let checkTime = validatetime(timeInput);
-        if (checkDate && checkTime) {
+        let checkAllInput = true;
+        for (let i = 0; i < addRecordInput.length; i++) {
+            if (addRecordInput[i].value == '') {
+                checkAllInput = false;
+                addRecordInput[i].parentElement.classList.add("input__error");
+            }
+            else {
+                addRecordInput[i].parentElement.classList.remove("input__error");
+            }
+        }
+        let checkDate = controller.validatedate(dateInput);
+        let checkTime = controller.validatetime(timeInput);
+        if (checkAllInput && checkDate && checkTime) {
             let data = {};
             for (let i = 0, length = radios.length; i < length; i++) {
                 if (radios[i].checked) {
@@ -308,10 +89,10 @@ var controller = {
             }
             data.items = itemInput.value;
             data.date = dateInput.value;
-            data.time = formatTime(timeInput.value);
+            data.time = controller.formatTime(timeInput.value);
             data.cost = costInput.value;
             state.shoppingRecordArr.push(data);
-            // newCartForm.reset();
+            newCartForm.reset();
             controller.showRecords();
         }
     },
@@ -341,6 +122,16 @@ var controller = {
         }
 
         state.summaryData = Object.values(summary);
+
+        for (let i = 0; i < state.summaryData.length; i++) {
+            for (let j = 0; j < (state.summaryData.length - i - 1); j++) {
+                if (state.summaryData[j].no_of_record < state.summaryData[j + 1].no_of_record) {
+                    let tmp = state.summaryData[j];
+                    state.summaryData[j] = state.summaryData[j + 1];
+                    state.summaryData[j + 1] = tmp;
+                }
+            }
+        }
 
         for (let i = 0; i < state.summaryData.length; i++) {
             htmlContent += views.summaryTableView(state.summaryData[i])
@@ -397,9 +188,20 @@ var controller = {
         let length = state.shoppingRecordArr.length;
         for (let i = 0; i < length; i++) {
             for (let j = 0; j < (length - i - 1); j++) {
-                let first = formatDate(state.shoppingRecordArr[j].date);
-                let second = formatDate(state.shoppingRecordArr[j + 1].date);
+                let first = controller.formatDate(state.shoppingRecordArr[j].date);
+                let second = controller.formatDate(state.shoppingRecordArr[j + 1].date);
                 if (first > second) {
+                    controller.swap(j);
+                }
+            }
+        }
+        controller.showRecords();
+    },
+    sortByTime() {
+        let length = state.shoppingRecordArr.length;
+        for (let i = 0; i < length; i++) {
+            for (let j = 0; j < (length - i - 1); j++) {
+                if (state.shoppingRecordArr[j].time > state.shoppingRecordArr[j + 1].time) {
                     controller.swap(j);
                 }
             }
@@ -428,15 +230,287 @@ var controller = {
         }
         controller.showRecords();
     },
+    searchRecord() {
+        let checkAllInput = true;
+        for (let i = 0; i < searchFormInput.length - 1; i++) {
+            if (addRecordInput[i].value == '') {
+                checkAllInput = false;
+                addRecordInput[i].parentElement.classList.add("input__error");
+            }
+            else {
+                addRecordInput[i].parentElement.classList.remove("input__error");
+            }
+        }
+        let checkDate = controller.validatedate(startDate) && controller.validatedate(endDate);
+        let checkTime = controller.validatetime(startTime) && controller.validatetime(endTime);
+        let checkStartEndDate = false;
+        let checkStartEndTime = false;
+        if (checkDate) {
+            let first = controller.formatDate(startDate.value);
+            let second = controller.formatDate(endDate.value);
+            if (first <= second) {
+                checkStartEndDate = true;
+                startDate.parentElement.classList.remove("mismatch__error");
+                endDate.parentElement.classList.remove("mismatch__error");
+            }
+            else {
+                startDate.parentElement.classList.add("mismatch__error");
+                endDate.parentElement.classList.add("mismatch__error");
+            }
+        }
+
+        if (checkTime) {
+            if (controller.formatTime(startTime.value) <= controller.formatTime(endTime.value)) {
+                checkStartEndTime = true;
+                startTime.parentElement.classList.remove("mismatch__error");
+                endTime.parentElement.classList.remove("mismatch__error");
+            }
+            else {
+                startTime.parentElement.classList.add("mismatch__error");
+                endTime.parentElement.classList.add("mismatch__error");
+            }
+        }
+        if (checkAllInput && checkStartEndDate && checkStartEndTime) {
+            let searchResultArray = [];
+            for (let i = 0; i < state.shoppingRecordArr.length; i++) {
+                let dateCondition = controller.formatDate(state.shoppingRecordArr[i].date) >= controller.formatDate(startDate.value)
+                    && controller.formatDate(state.shoppingRecordArr[i].date) <= controller.formatDate(endDate.value);
+                let timeCondition = Number(state.shoppingRecordArr[i].time) >= controller.formatTime(startTime.value)
+                    && Number(state.shoppingRecordArr[i].time) <= controller.formatTime(endTime.value);
+                let searchInputCondition = itemSearchInput.value !== ''
+                    ? state.shoppingRecordArr[i].items.toLowerCase().includes(itemSearchInput.value.toLowerCase())
+                    : true;
+
+                if (dateCondition && timeCondition && searchInputCondition) {
+                    searchResultArray.push({ ...state.shoppingRecordArr[i] })
+                }
+            }
+            if (searchResultArray.length > 0) {
+                let htmlContent = '';
+                for (let i = 0; i < searchResultArray.length; i++) {
+                    htmlContent += views.searchTableView(searchResultArray[i]);
+                }
+                resultBody.innerHTML = '';
+                resultBody.innerHTML = htmlContent;
+            }
+            else {
+                resultBody.innerHTML = ''
+                console.log("no matching record");
+            }
+
+        }
+
+    },
+    validatedate(inputText) {
+        let format = inputText.value.split('/');
+        let day, month, year;
+
+        if (format.length == 3) {
+            day = parseInt(format[0]);
+            month = parseInt(format[1]);
+            year = parseInt(format[2]);
+        }
+        if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year > 1583) {
+            let numberOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (month == 1 || month > 2) {
+                if (day > numberOfDays[month - 1]) {
+                    controller.alertInvalid(inputText);
+                    return false;
+                }
+            }
+            if (month == 2) {
+                let leapYear = false;
+                if ((!(year % 4) && year % 100) || !(year % 400)) {
+                    leapYear = true;
+                }
+                if ((leapYear == false) && (day >= 29)) {
+                    controller.alertInvalid(inputText);
+                    return false;
+                }
+                if ((leapYear == true) && (day > 29)) {
+                    controller.alertInvalid(inputText);
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            controller.alertInvalid(inputText);
+            return false;
+        }
+    },
+    formatDate(data) {
+        let format = data.split("/");
+        return new Date(`${format[1]}/${format[0]}/${format[2]}`);
+    },
+    validatetime(input) {
+        var inputValue = input.value;
+
+        if (inputValue.length < 5) {
+            controller.alertInvalid(input);
+            return false;
+        }
+        if (inputValue.length > 7) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        if (inputValue.charAt(inputValue.length - 1) != "M" && inputValue.charAt(
+            inputValue.length - 1) != "m") {
+            controller.alertInvalid(input);
+            return false;
+
+        }
+        else if (inputValue.charAt(inputValue.length - 2) != 'A' && inputValue.charAt(
+            inputValue.length - 2) != 'a' && inputValue.charAt(
+                inputValue.length - 2) != 'p' && inputValue.charAt(inputValue.length - 2) != 'P') {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        var seperatorPosition = inputValue.indexOf(':');
+
+        if (seperatorPosition < 0) {
+            controller.alertInvalid(input);
+            return false;
+        }
+        else if (seperatorPosition > 2 || seperatorPosition < 1) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        var hourValue = controller.shortenString(inputValue.substring(0, seperatorPosition));
+
+        if (hourValue == -100) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+
+        if (hourValue > 23) {
+            controller.alertInvalid(input);
+            return false;
+        }
+        else if (hourValue < 0) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        if (hourValue > 11 && inputValue.charAt(
+            inputValue.length - 2) == 'a') {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        if (hourValue < 12 && inputValue.charAt(
+            inputValue.length - 2) == 'p') {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        var minuteValue = controller.shortenString(inputValue.substring(seperatorPosition + 1, seperatorPosition + 3));
+
+        if (minuteValue == -100) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        if (minuteValue > 59) {
+            controller.alertInvalid(input);
+            return false;
+        }
+        else if (minuteValue < 0) {
+            controller.alertInvalid(input);
+            return false;
+        }
+
+        return true;
+    },
+    formatTime(data) {
+        return Number(data.split(":")[0]);
+    },
+    shortenString(str) {
+        var string = '';
+        var i = 0;
+        while (i != str.length) {
+            if (str.charAt(i) != ' ') string = string + str.charAt(i); i++;
+        }
+        var retval = controller.checkIfNumber(string);
+        if (retval == false)
+            return -100;
+        else
+            return string;
+    },
+    checkIfNumber(strString) {
+        var strValidChars = "0123456789";
+        var strChar;
+        var blnResult = true;
+        if (strString.length == 0)
+            return false;
+        for (i = 0; i < strString.length && blnResult == true; i++) {
+            strChar = strString.charAt(i);
+            if (strValidChars.indexOf(strChar) == -1) {
+                blnResult = false;
+            }
+        }
+        return blnResult;
+    },
     swap(j) {
         let tmp = state.shoppingRecordArr[j];
         state.shoppingRecordArr[j] = state.shoppingRecordArr[j + 1];
         state.shoppingRecordArr[j + 1] = tmp;
+    },
+    alertInvalid(element) {
+        if (element.value == '') {
+            element.parentElement.classList.add("input__error");
+            element.parentElement.classList.remove("validate__error");
+        }
+        else {
+            element.parentElement.classList.remove("input__error");
+            element.parentElement.classList.add("validate__error");
+        }
     },
     onInit() {
         controller.showRecords();
         controller.tallyRecord();
     }
 }
+
+addButton.addEventListener('click', addRecord);
+sortBy.addEventListener("change", sortRecords);
+searchButton.addEventListener('click', searchRecord);
+
+function addRecord(e) {
+    e.preventDefault();
+    controller.addRecord();
+}
+
+function searchRecord(e) {
+    e.preventDefault();
+    controller.searchRecord();
+}
+
+function sortRecords(e) {
+    let sortValue = sortBy.value;
+    if (sortValue != '') {
+        if (sortValue == 'location') {
+            controller.sortByLocation();
+        }
+        else if (sortValue == 'date') {
+            controller.sortByDate();
+        }
+        else if (sortValue == 'time') {
+            controller.sortByTime();
+        }
+        else if (sortValue == 'items') {
+            controller.sortByItems();
+        }
+        else if (sortValue == 'cost') {
+            controller.sortByCost();
+        }
+    }
+}
+
+sortRecords()
 
 controller.onInit();
