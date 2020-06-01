@@ -10,154 +10,170 @@
 
 <body>
 
-    <nav class="nav">
-        <h1 class="title title__medium">HomewareCity</h1>
-        <ul class="navigation">
-            <li class="active"><a href="#">All RECORD</a></li>
-            <li><a href="#">SUMMARY</a></li>
-            <li><a href="#">SEARCH</a></li>
-        </ul>
-        <p class="paragraph">
-            copyright &copy; HomewareCity 2020
-        </p>
-    </nav>
+    <div class="container main__container">
+        <nav class="nav">
+            <h1 class="title title__medium">HomewareCity</h1>
+            <ul class="navigation">
+                <li class="active"><a id="all_record_btn" href="#">All RECORD</a></li>
+                <li><a href="#" id="summary__btn">SUMMARY</a></li>
+                <li><a href="#" id="nav_search__btn">SEARCH</a></li>
+            </ul>
+            <p class="paragraph">
+                &copy; 2020 HomewareCity
+            </p>
+        </nav>
+        <div class="main__content">
+            <h1 class="title title_main">Shopping Cart System</h1>
+            <div class="main__content-box">
+                <div class="cart__record">
+                    <div class="record__table-box">
+                        <h2 class="title title__medium">All Record</h2>
+                        <div class="sort__by">
+                            <label for="sort_by">Sort by:</label>
+                            <select id="sort_by">
+                                <option value>Select option</option>
+                                <option value="location">Buyers Location</option>
+                                <option value="date">Date</option>
+                                <option value="time">Time</option>
+                                <option value="items">Items</option>
+                                <option value="cost">Cost</option>
+                            </select>
+                        </div>
+                        <table id="record__table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:15rem;">Buyer Location</th>
+                                    <th style="min-width:12rem;">Date</th>
+                                    <th style="min-width:4rem;">Time</th>
+                                    <th style="min-width:20rem;">Items</th>
+                                    <th style="min-width:7rem;">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="main__record__body">
 
-    <!-- <div class="container">
-        <div>
-            <div class="cart__record">
-                <label for="sort_by">Sort by:</label>
-                <select id="sort_by">
-                    <option value>Select option</option>
-                    <option value="location">Buyers Location</option>
-                    <option value="date">Date</option>
-                    <option value="time">Time</option>
-                    <option value="items">Items</option>
-                    <option value="cost">Cost</option>
-                </select>
-                <table id="record__table">
-                    <thead>
-                        <tr>
-                            <th>Buyer Location</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Items</th>
-                            <th>Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="main__record__body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="summary__table-box">
+                        <h2 class="title title__medium">Summary</h2>
+                        <table id="summary__table">
+                            <thead>
+                                <tr>
+                                    <th>Buyer Location</th>
+                                    <th>No. of records</th>
+                                    <th>Total cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="summary__body">
 
-                    </tbody>
-                </table>
-                <table id="summary__table">
-                    <thead>
-                        <tr>
-                            <th>Buyer Location</th>
-                            <th>No. of records</th>
-                            <th>Total cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="summary__body">
-
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="cart__add">
+                    <h2 class="title title__medium">Add new record</h2>
+                    <form id="newCartForm">
+                        <div>
+                            <label class="buyer__from">Buyer From:</label>
+                            <div class="radio__wrapper">
+                                <div>
+                                    <input type="radio" id="toowoomba" name="location" checked value="Toowoomba">
+                                    <label for="toowoomba">Toowoomba</label><br>
+                                </div>
+                                <div>
+                                    <input type="radio" id="australia" name="location" value="Australia">
+                                    <label for="australia">Australia</label><br>
+                                </div>
+                                <div>
+                                    <input type="radio" id="oversea" name="location" value="Oversea">
+                                    <label for="oversea">Oversea</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input__box">
+                            <input type="text" id="item" placeholder="Items">
+                            <p class="error input__error-message">Items cannot be empty</p>
+                        </div>
+                        <div class="input__box">
+                            <input type="text" id=date placeholder="Date">
+                            <p class="error input__error-message">Date cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid date</p>
+                        </div>
+                        <div class="input__box">
+                            <input type="text" id=time placeholder="Time">
+                            <p class="error input__error-message">Time cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid time</p>
+                        </div>
+                        <div class="input__box">
+                            <input type="number" id=cost placeholder="Cost(AUD)">
+                            <p class="error input__error-message">Cost cannot be empty</p>
+                        </div>
+                        <a href="#" id="addButton" class="btn btn__secondary">Add shopping record</a>
+                    </form>
+                </div>
             </div>
-            <div class="card__add">
-                <form id="newCartForm">
-                    <div>
-                        <label>Buyer From</label>
-                        <input type="radio" id="toowoomba" name="location" checked value="Toowoomba">
-                        <label for="toowoomba">Toowoomba</label><br>
-                        <input type="radio" id="australia" name="location" value="Australia">
-                        <label for="australia">Australia</label><br>
-                        <input type="radio" id="oversea" name="location" value="Oversea">
-                        <label for="oversea">Oversea</label>
-                    </div>
-                    <div>
-                        <label for="item">Items</label>
-                        <input type="text" id="item">
-                        <p class="input__error-message">Items cannot be empty</p>
-                    </div>
-                    <div>
-                        <label for="date">Date</label>
-                        <input type="text" id=date>
-                        <p class="input__error-message">Date cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid date</p>
-                    </div>
-                    <div>
-                        <label for="time">Time</label>
-                        <input type="text" id=time>
-                        <p class="input__error-message">Time cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid time</p>
-                    </div>
-                    <div>
-                        <label for="cost">Cost(AUD)</label>
-                        <input type="number" id=cost>
-                        <p class="input__error-message">Cost cannot be empty</p>
-                    </div>
-                    <a href="#" id="addButton" class="btn btn__secondary">Add shopping record</a>
-                </form>
+            <div class="search__content-box">
+                <div class="result__table-wrapper">
+                    <h2 class="title title__medium">Search result</h2>
+                    <h3 class="title title__small no__matching-message">No any match record found.</h3>
+                    <table id="result__table">
+                        <thead>
+                            <tr>
+                                <th>Buyer Location</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Items</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result__body">
+
+                        </tbody>
+                    </table>
+                    </table>
+                </div>
+                <div class="result__option">
+                    <h2 class="title title__medium">Search</h2>
+                    <form id="searchForm">
+                        <label for="start_date">Start Date:</label>
+                        <div class="input__box">
+                            <input type="text" id="start_date" value="01/01/2000">
+                            <p class="error input__error-message">Start Date cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid date</p>
+                            <p class="error mismatch__error-message">Start Date must be before End Date</p>
+                        </div>
+                        <label for="start_time">Start Time:</label>
+                        <div class="input__box">
+                            <input type="text" id="start_time" value="00:00am">
+                            <p class="error input__error-message">Start Time cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid time</p>
+                            <p class="error mismatch__error-message">Start Time must be before End Time</p>
+                        </div>
+                        <label for="end_date">End Date:</label>
+                        <div class="input__box">
+                            <input type="text" id="end_date" value="31/12/2020">
+                            <p class="error input__error-message">End Date cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid date</p>
+                            <p class="error mismatch__error-message">End Date must be before Start Date</p>
+                        </div>
+                        <label for="end_time">End Time:</label>
+                        <div class="input__box">
+                            <input type="text" id="end_time" value="23:59pm">
+                            <p class="error input__error-message">End Time cannot be empty</p>
+                            <p class="error validate__error-message">Looks like this is not a valid time</p>
+                            <p class="error mismatch__error-message">End Time must be before Start Time</p>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Enter item name" id="itemSearch">
+                        </div>
+                        <a href="#" id="searchButton" class="btn btn__primary">Search</a>
+                    </form>
+                </div>
             </div>
         </div>
-        <div>
-            <div class="result__table-wrapper">
-                <table id="result__table">
-                    <thead>
-                        <tr>
-                            <th>Buyer Location</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Items</th>
-                            <th>Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="result__body">
+    </div>
 
-                    </tbody>
-                </table>
-                </table>
-            </div>
-            <div class="result__option">
-                <form id="searchForm">
-                    <div>
-                        <label for="start_date">Start Date</label>
-                        <input type="text" id="start_date" value="01/01/2000">
-                        <p class="input__error-message">Start Date cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid date</p>
-                        <p class="mismatch__error-message">Start Date must be before End Date</p>
-                    </div>
-                    <div>
-                        <label for="start_time">Time</label>
-                        <input type="text" id="start_time" value="00:00am">
-                        <p class="input__error-message">Start Time cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid time</p>
-                        <p class="mismatch__error-message">Start Time must be before End Time</p>
-                    </div>
-                    <div>
-                        <label for="end_date">End Date</label>
-                        <input type="text" id="end_date" value="31/12/2020">
-                        <p class="input__error-message">End Date cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid date</p>
-                        <p class="mismatch__error-message">End Date must be before Start Date</p>
-                    </div>
-                    <div>
-                        <label for="end_time">Time</label>
-                        <input type="text" id="end_time" value="23:59pm">
-                        <p class="input__error-message">End Time cannot be empty</p>
-                        <p class="validate__error-message">Looks like this is not a valid time</p>
-                        <p class="mismatch__error-message">End Time must be before Start Time</p>
-                    </div>
-                    <div>
-                        <input type="text" placeholder="Enter item name" id="itemSearch">
-                    </div>
-                    <a href="#" id="searchButton" class="btn btn__primary">Search</a>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
-
-
-    <!-- <script src="js/main.js"></script> -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>

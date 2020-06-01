@@ -9,6 +9,7 @@ const radios = document.getElementsByName('location'),
     sortBy = document.getElementById("sort_by"),
     recordTable = document.getElementById("record__table"),
     mainTableBody = document.getElementById('main__record__body'),
+    summaryButton = document.getElementById("summary__btn"),
     summaryBody = document.getElementById("summary__body"),
     searchFormInput = document.querySelectorAll("#searchForm input"),
     searchButton = document.getElementById("searchButton"),
@@ -18,7 +19,14 @@ const radios = document.getElementsByName('location'),
     endDate = document.getElementById("end_date"),
     startTime = document.getElementById("start_time"),
     endTime = document.getElementById("end_time"),
-    itemSearchInput = document.getElementById("itemSearch");
+    itemSearchInput = document.getElementById("itemSearch"),
+    mainContentBox = document.querySelector(".main__content-box"),
+    searchContentBox = document.querySelector(".search__content-box"),
+    recordTableBox = document.querySelector(".record__table-box"),
+    summaryTableBox = document.querySelector(".summary__table-box"),
+    navagationLi = document.querySelectorAll(".navigation li"),
+    allRecordButton = document.getElementById("all_record_btn"),
+    navSearchButton = document.getElementById("nav_search__btn");
 
 var state = {
     shoppingRecordArr: [
@@ -283,12 +291,12 @@ var controller = {
     searchRecord() {
         let checkAllInput = true;
         for (let i = 0; i < searchFormInput.length - 1; i++) {
-            if (addRecordInput[i].value == '') {
+            if (searchFormInput[i].value == '') {
                 checkAllInput = false;
-                addRecordInput[i].parentElement.classList.add("input__error");
+                searchFormInput[i].parentElement.classList.add("input__error");
             }
             else {
-                addRecordInput[i].parentElement.classList.remove("input__error");
+                searchFormInput[i].parentElement.classList.remove("input__error");
             }
         }
         let checkDate = controller.isValidDate(startDate) && controller.isValidDate(endDate);
@@ -298,6 +306,8 @@ var controller = {
         if (checkDate) {
             let first = controller.formatDate(startDate.value);
             let second = controller.formatDate(endDate.value);
+            startDate.parentElement.classList.remove("validate__error");
+            endDate.parentElement.classList.remove("validate__error");
             if (first <= second) {
                 checkStartEndDate = true;
                 startDate.parentElement.classList.remove("mismatch__error");
@@ -310,6 +320,8 @@ var controller = {
         }
 
         if (checkTime) {
+            startTime.parentElement.classList.remove("validate__error");
+            endTime.parentElement.classList.remove("validate__error");
             if (controller.formatTime(startTime.value) <= controller.formatTime(endTime.value)) {
                 checkStartEndTime = true;
                 startTime.parentElement.classList.remove("mismatch__error");
@@ -336,16 +348,18 @@ var controller = {
                 }
             }
             if (searchResultArray.length > 0) {
+
                 let htmlContent = '';
                 for (let i = 0; i < searchResultArray.length; i++) {
                     htmlContent += views.searchTableView(searchResultArray[i]);
                 }
                 resultBody.innerHTML = '';
                 resultBody.innerHTML = htmlContent;
+                document.querySelector(".result__table-wrapper").classList.remove("no__matching-record")
             }
             else {
                 resultBody.innerHTML = ''
-                console.log("no matching record");
+                document.querySelector(".result__table-wrapper").classList.add("no__matching-record");
             }
 
         }
@@ -579,6 +593,32 @@ sortBy.addEventListener("change", sortRecords);
  * @param  {} searchRecord calls this function after searchButton is pressed
  */
 searchButton.addEventListener('click', searchRecord);
+
+/**
+ * @param  {} 'click' catch whenever summaryButton  is pressed
+ * @param  {} tallyRecords calls this function after summaryButton is pressed
+ */
+summaryButton.addEventListener('click', tallyRecords);
+
+
+allRecordButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    removeActiveClassOnNav()
+    allRecordButton.parentElement.classList.add("active");
+    summaryTableBox.style.display = "none";
+    searchContentBox.style.display = "none";
+    mainContentBox.style.display = 'flex';
+    recordTableBox.style.display = "block";
+});
+
+navSearchButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    removeActiveClassOnNav()
+    navSearchButton.parentElement.classList.add("active");
+    mainContentBox.style.display = 'none';
+    searchContentBox.style.display = "flex";
+})
+
 /**
  * @param  {object} e event object of addButton button
  * @description prevent default behaviour after button click and finally calls addRecord funciton on controller object
@@ -586,6 +626,7 @@ searchButton.addEventListener('click', searchRecord);
 function addRecords(e) {
     e.preventDefault();
     controller.addRecords();
+    controller.tallyRecords();
 }
 
 /**
@@ -619,6 +660,27 @@ function sortRecords(e) {
         else if (sortValue == 'cost') {
             controller.sortByCost();
         }
+    }
+}
+
+/**
+ * @param  {object} e event object of summaryButton button
+ * @description prevent default behaviour after button click and finally calls tallyRecords funciton on controller object
+ */
+function tallyRecords(e) {
+    e.preventDefault();
+    controller.tallyRecords();
+    removeActiveClassOnNav()
+    summaryButton.parentElement.classList.add("active");
+    recordTableBox.style.display = "none";
+    searchContentBox.style.display = "none";
+    mainContentBox.style.display = 'flex';
+    summaryTableBox.style.display = "block";
+}
+
+function removeActiveClassOnNav() {
+    for (let i = 0; i < navagationLi.length; i++) {
+        navagationLi[i].classList.remove("active");
     }
 }
 
