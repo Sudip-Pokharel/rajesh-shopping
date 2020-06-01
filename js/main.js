@@ -32,6 +32,10 @@ var state = {
 }
 
 var views = {
+    /**
+     * @param  {object} data The data for main record table body td
+     * @returns {string} this returns each html tr for main record table
+     */
     mainTableView(data) {
         return `
         <tr>
@@ -43,6 +47,10 @@ var views = {
         </tr>
         `;
     },
+    /**
+     * @param  {object} data The data for summary table body td
+     * @returns {string} this returns each html tr for main record table
+     */
     summaryTableView(data) {
         return `
         <tr>
@@ -52,6 +60,10 @@ var views = {
         </tr>
         `;
     },
+    /**
+     * @param  {} data The data for search table body td
+     * @returns {string} this returns each html tr for search table body
+     */
     searchTableView(data) {
         return `
         <tr>
@@ -64,8 +76,11 @@ var views = {
         `
     }
 }
-
 var controller = {
+    /**
+     * @description this checks input if valid or not and if valid add new valid record to shoppingRecord Arr
+     * @description if record is invalid class is added to their parent element to style in css
+     */
     addRecord() {
         let checkAllInput = true;
         for (let i = 0; i < addRecordInput.length; i++) {
@@ -96,6 +111,9 @@ var controller = {
             controller.showRecords();
         }
     },
+    /**
+     * @description this loop over shoppingRecordArr and calls view for mainTableView and finally display content on body tag
+     */
     showRecords() {
         let htmlContent = '';
         for (let i = 0; i < state.shoppingRecordArr.length; i++) {
@@ -104,6 +122,11 @@ var controller = {
         mainTableBody.innerHTML = '';
         mainTableBody.innerHTML = htmlContent;
     },
+    /**
+     * @description this loop over shoppingRecordArr and calculate no_of_record according to location
+     * @description arrange data in desending order
+     * @description finally calls summaryTableView and display html content on body
+     */
     tallyRecord() {
         let summary = {};
         let htmlContent = '';
@@ -140,6 +163,14 @@ var controller = {
         summaryBody.innerHTML = '';
         summaryBody.innerHTML = htmlContent;
     },
+    /**
+     * @description this calculate no_of_record a/c to location and store in newArray
+     * @description arrange  newArray a/c to location descending order
+     * @description array newArray a/c to no_of_record
+     * @description compares shoppingRecordArr location and newArray location and when equals push to newShoppingArr
+     * @description finally replace ShoppingRecordArr with newShoppingArr and calls showRecords
+     * 
+     */
     sortByLocation() {
         let newObject = {};
         for (let i = 0; i < state.shoppingRecordArr.length; i++) {
@@ -184,6 +215,10 @@ var controller = {
         state.shoppingRecordArr = [...newShoppingArray];
         controller.showRecords();
     },
+    /**
+     * @description this sort shoppingRecordArr with date by bubble sorting and calls showRecords 
+     * @description also bedore sorting  convert each date to make in readable format for new Date() by passing value to formatDate function
+     */
     sortByDate() {
         let length = state.shoppingRecordArr.length;
         for (let i = 0; i < length; i++) {
@@ -197,6 +232,9 @@ var controller = {
         }
         controller.showRecords();
     },
+    /**
+    * @description this sort shoppingRecordArr with time by bubble sorting and calls showRecords 
+    */
     sortByTime() {
         let length = state.shoppingRecordArr.length;
         for (let i = 0; i < length; i++) {
@@ -208,6 +246,9 @@ var controller = {
         }
         controller.showRecords();
     },
+    /**
+   * @description this sort shoppingRecordArr with cost by bubble sorting and calls showRecords 
+   */
     sortByCost() {
         let length = state.shoppingRecordArr.length;
         for (let i = 0; i < length; i++) {
@@ -219,6 +260,9 @@ var controller = {
         }
         controller.showRecords();
     },
+    /**
+   * @description this sort shoppingRecordArr with items by bubble sorting and calls showRecords 
+   */
     sortByItems() {
         let length = state.shoppingRecordArr.length;
         for (let i = 0; i < length; i++) {
@@ -230,6 +274,12 @@ var controller = {
         }
         controller.showRecords();
     },
+    /**
+   * @description this check all input validation in search form and if not valid add class a/c to error in their parent element
+   * @description also validate startDate startTime and endDate endTime 
+   * @description after validation results true check each element on shoppingRecordArr with entered input value and if true push to searchResultArray
+   * @description if searchResultArray has element call searchTableView and displays in table
+   */
     searchRecord() {
         let checkAllInput = true;
         for (let i = 0; i < searchFormInput.length - 1; i++) {
@@ -301,6 +351,10 @@ var controller = {
         }
 
     },
+    /**
+     * @param  {element} inputText this is input date element consisting value of date
+     * @returns {boolean} return true if date is validated and false if not validated. also add class to parent element if not valid
+     */
     validatedate(inputText) {
         let format = inputText.value.split('/');
         let day, month, year;
@@ -339,10 +393,19 @@ var controller = {
             return false;
         }
     },
+
+    /**
+     * @param  {string} data this takes input as date string 
+     * @returns converts to date with new Date()
+     */
     formatDate(data) {
         let format = data.split("/");
         return new Date(`${format[1]}/${format[0]}/${format[2]}`);
     },
+    /**
+    * @param  {element} data this is input time element consisting value of time
+    * @returns {boolean} return true if time is validated and false if not validated. also add class to parent element if not valid
+    */
     validatetime(input) {
         var inputValue = input.value;
 
@@ -426,9 +489,17 @@ var controller = {
 
         return true;
     },
+    /**
+     * @param  {string} data this takes input as time
+     * @returns only return hour
+     */
     formatTime(data) {
         return Number(data.split(":")[0]);
     },
+    /**
+     * @param  {string} str this checks if string or not
+     * @returns return -100 if number and return sting if not number
+     */
     shortenString(str) {
         var string = '';
         var i = 0;
@@ -441,6 +512,10 @@ var controller = {
         else
             return string;
     },
+    /**
+     * @description checks if value entered by user is numeric or not
+     * @returns if not numbric returns false
+     */
     checkIfNumber(strString) {
         var strValidChars = "0123456789";
         var strChar;
@@ -455,11 +530,18 @@ var controller = {
         }
         return blnResult;
     },
+
+    /**
+     * @param  {integer} j this swap value for bubble sorting in shoppingRecordArr
+     */
     swap(j) {
         let tmp = state.shoppingRecordArr[j];
         state.shoppingRecordArr[j] = state.shoppingRecordArr[j + 1];
         state.shoppingRecordArr[j + 1] = tmp;
     },
+    /**
+     * @param  {html element object} element receive element for adding class in parent element for invalid input element
+     */
     alertInvalid(element) {
         if (element.value == '') {
             element.parentElement.classList.add("input__error");
@@ -470,26 +552,55 @@ var controller = {
             element.parentElement.classList.add("validate__error");
         }
     },
+
+    /**
+     * @description execute on start and calls showRecords for record showing and tallyRecord for summary table
+     */
     onInit() {
         controller.showRecords();
         controller.tallyRecord();
     }
 }
 
+/**
+ * @param  {event} 'click' catch whenever addButton on new rocord adding form clicks
+ * @param  {function} addRecord calls this function after addButton is clicked
+ */
 addButton.addEventListener('click', addRecord);
-sortBy.addEventListener("change", sortRecords);
-searchButton.addEventListener('click', searchRecord);
 
+/**
+ * @param  {event} "change" executes when user changes sortBy value
+ * @param  {function} sortRecords calls this function after value of sortBy is changed
+ */
+sortBy.addEventListener("change", sortRecords);
+
+/**
+ * @param  {} 'click' catch whenever searchButton on search form  is pressed
+ * @param  {} searchRecord calls this function after searchButton is pressed
+ */
+searchButton.addEventListener('click', searchRecord);
+/**
+ * @param  {object} e event object of addButton button
+ * @description prevent default behaviour after button click and finally calls addRecord funciton on controller object
+ */
 function addRecord(e) {
     e.preventDefault();
     controller.addRecord();
 }
 
+/**
+ * @param  {object} e event object of searchButton button
+ * @description prevent default behaviour after button click and finally calls searchRecord funciton on controller object
+ */
 function searchRecord(e) {
     e.preventDefault();
     controller.searchRecord();
 }
 
+/**
+ * @param  {object} e event object of sortBy select element
+ * @description checks value of select element form event object and calls sortBy function accordin to value
+ */
 function sortRecords(e) {
     let sortValue = sortBy.value;
     if (sortValue != '') {
@@ -511,6 +622,7 @@ function sortRecords(e) {
     }
 }
 
-sortRecords()
-
+/**
+ * @description execute when document is loaded
+ */
 controller.onInit();
