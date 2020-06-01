@@ -81,7 +81,7 @@ var controller = {
      * @description this checks input if valid or not and if valid add new valid record to shoppingRecord Arr
      * @description if record is invalid class is added to their parent element to style in css
      */
-    addRecord() {
+    addRecords() {
         let checkAllInput = true;
         for (let i = 0; i < addRecordInput.length; i++) {
             if (addRecordInput[i].value == '') {
@@ -92,8 +92,8 @@ var controller = {
                 addRecordInput[i].parentElement.classList.remove("input__error");
             }
         }
-        let checkDate = controller.validatedate(dateInput);
-        let checkTime = controller.validatetime(timeInput);
+        let checkDate = controller.isValidDate(dateInput);
+        let checkTime = controller.isValidTime(timeInput);
         if (checkAllInput && checkDate && checkTime) {
             let data = {};
             for (let i = 0, length = radios.length; i < length; i++) {
@@ -127,7 +127,7 @@ var controller = {
      * @description arrange data in desending order
      * @description finally calls summaryTableView and display html content on body
      */
-    tallyRecord() {
+    tallyRecords() {
         let summary = {};
         let htmlContent = '';
         for (let i = 0; i < state.shoppingRecordArr.length; i++) {
@@ -291,8 +291,8 @@ var controller = {
                 addRecordInput[i].parentElement.classList.remove("input__error");
             }
         }
-        let checkDate = controller.validatedate(startDate) && controller.validatedate(endDate);
-        let checkTime = controller.validatetime(startTime) && controller.validatetime(endTime);
+        let checkDate = controller.isValidDate(startDate) && controller.isValidDate(endDate);
+        let checkTime = controller.isValidTime(startTime) && controller.isValidTime(endTime);
         let checkStartEndDate = false;
         let checkStartEndTime = false;
         if (checkDate) {
@@ -355,7 +355,7 @@ var controller = {
      * @param  {element} inputText this is input date element consisting value of date
      * @returns {boolean} return true if date is validated and false if not validated. also add class to parent element if not valid
      */
-    validatedate(inputText) {
+    isValidDate(inputText) {
         let format = inputText.value.split('/');
         let day, month, year;
 
@@ -406,7 +406,7 @@ var controller = {
     * @param  {element} data this is input time element consisting value of time
     * @returns {boolean} return true if time is validated and false if not validated. also add class to parent element if not valid
     */
-    validatetime(input) {
+    isValidTime(input) {
         var inputValue = input.value;
 
         if (inputValue.length < 5) {
@@ -554,11 +554,11 @@ var controller = {
     },
 
     /**
-     * @description execute on start and calls showRecords for record showing and tallyRecord for summary table
+     * @description execute on start and calls showRecords for record showing and tallyRecords for summary table
      */
     onInit() {
         controller.showRecords();
-        controller.tallyRecord();
+        controller.tallyRecords();
     }
 }
 
@@ -566,7 +566,7 @@ var controller = {
  * @param  {event} 'click' catch whenever addButton on new rocord adding form clicks
  * @param  {function} addRecord calls this function after addButton is clicked
  */
-addButton.addEventListener('click', addRecord);
+addButton.addEventListener('click', addRecords);
 
 /**
  * @param  {event} "change" executes when user changes sortBy value
@@ -583,9 +583,9 @@ searchButton.addEventListener('click', searchRecord);
  * @param  {object} e event object of addButton button
  * @description prevent default behaviour after button click and finally calls addRecord funciton on controller object
  */
-function addRecord(e) {
+function addRecords(e) {
     e.preventDefault();
-    controller.addRecord();
+    controller.addRecords();
 }
 
 /**

@@ -37,7 +37,7 @@ body {
     position: relative;
     font-family: $default-font;
     font-size: 1.6rem;
-    color: $color-gray-blue;
+    color: $color-dark-blue;
     line-height: 1.7;
     font-weight: 400;
     background-color: $color-red;
@@ -95,6 +95,15 @@ input {
         font-weight: 700;
         line-height: 1.3;
     }
+    &__medium {
+        font-size: 2.4rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+}
+
+ul {
+    list-style-type: none;
 }
 
 .container {
@@ -105,4 +114,62 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24rem;
+    padding: 5rem 0;
+    background-color: $color-dark-blue;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    // justify-content: flex-start;
+    // align-items: center;
+    .title.title__medium {
+        padding-left: 3rem;
+        margin-bottom: 4rem;
+    }
+    .navigation {
+        li {
+            padding: .8rem 0;
+            position: relative;
+            z-index: 2;
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 100%;
+                background-color: $color-blue;
+                z-index: 1;
+                opacity: 0;
+                visibility: hidden;
+                transition: 0.2s ease-in-out;
+            }
+            &.active,
+            &:hover {
+                &::before {
+                    width: 100%;
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+           
+            a {
+                padding-left: 3rem;        
+                text-transform: capitalize;
+                font-size: 1.8rem;
+                color: $color-light;
+                letter-spacing: .05rem;
+                display: block;
+                position: relative;
+                z-index: 3;
+            }
+           
+        }
+    }
 }
