@@ -30,11 +30,11 @@ const radios = document.getElementsByName('location'),
 
 var state = {
     shoppingRecordArr: [
-        { location: 'Oversea', items: 'copy', date: '03/12/1998', time: '10', cost: "44" },
-        { location: 'Toowoomba', items: 'car', date: '08/02/1875', time: '23', cost: "55" },
-        { location: 'Toowoomba', items: 'car', date: '08/02/1875', time: '23', cost: "55" },
-        { location: 'Toowoomba', items: 'car', date: '08/02/1875', time: '23', cost: "55" },
-        { location: 'Australia', items: 'Pen, paper', date: '31/12/1773', time: '01', cost: "33" },
+        { location: 'Toowoomba', items: 'Chair', date: '23/5/2020', time: '9', cost: "10" },
+        { location: 'Toowoomba', items: 'Sofa, sofa cover', date: '25/5/2020', time: '10', cost: "450" },
+        { location: 'Toowoomba', items: 'Table cover', date: '26/5/2020', time: '11', cost: "15" },
+        { location: 'Australia', items: 'Light', date: '24/5/2020', time: '12', cost: "13" },
+        { location: 'Oversea', items: 'Bed', date: '25/5/2020', time: '10', cost: "700" }
     ],
     summaryData: []
 }

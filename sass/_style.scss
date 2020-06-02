@@ -133,7 +133,6 @@ ul {
     }
     .navigation {
         li {
-            padding: .8rem 0;
             position: relative;
             z-index: 2;
             &::before {
@@ -159,7 +158,7 @@ ul {
             }
            
             a {
-                padding-left: 3rem;        
+                padding: .8rem 0 .8rem 3rem;
                 text-transform: capitalize;
                 font-size: 1.6rem;
                 font-weight: 400;

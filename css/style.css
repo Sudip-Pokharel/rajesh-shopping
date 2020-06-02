@@ -113,7 +113,6 @@ ul {
   margin-bottom: 4rem;
 }
 .nav .navigation li {
-  padding: 0.8rem 0;
   position: relative;
   z-index: 2;
 }
@@ -136,7 +135,7 @@ ul {
   visibility: visible;
 }
 .nav .navigation li a {
-  padding-left: 3rem;
+  padding: 0.8rem 0 0.8rem 3rem;
   text-transform: capitalize;
   font-size: 1.6rem;
   font-weight: 400;
@@ -369,4 +368,3 @@ ul {
   width: 100%;
 }
 
-/*# sourceMappingURL=style.css.map */
